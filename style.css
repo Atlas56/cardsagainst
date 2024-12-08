@@ -1,0 +1,207 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f5f5f5;
+  overflow: hidden;
+}
+
+.card-container {
+  position: relative;
+  width: 310px;
+  height: 410px;
+  margin: 0 auto;
+  perspective: 1000px;
+
+}
+
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 5px 10px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.card[data-turned="true"] {
+  background-color: black !important;
+  color: white !important;
+  box-shadow: none !important;
+}
+
+.card-container .card:nth-child(1) { z-index: 10; }
+.card-container .card:nth-child(2) { z-index: 9; }
+.card-container .card:nth-child(3) { z-index: 8; }
+.card-container .card:nth-child(4) { z-index: 7; }
+.card-container .card:nth-child(5) { z-index: 6; }
+.card-container .card:nth-child(6) { z-index: 5; }
+
+.imagecard {
+  position: absolute;
+  width: 310px;
+  height: 410px;
+  background-color: #050505;
+  border-radius: 10px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 5px 10px 20px rgba(0, 0, 0, 0.08);
+  z-index: 11;
+}
+
+.imagecard img { width: 50%; height: auto; }
+
+.hidden { display: none; }
+
+.imagecard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.imagecard.flipped .imagecard-inner { transform: rotateY(180deg); }
+
+.imagecard-front, .imagecard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagecard-front img { width: 50%; height: auto; }
+
+.imagecard-back {
+  background-color: white;
+  color: black;
+  transform: rotateY(180deg);
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.swipe-arrow.up {
+  position: absolute;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.swipe-arrow.up img { width: 40px; height: 40px; }
+
+.swipe-arrow.up span {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+}
+
+.swipe-arrows-horizontal {
+  position: absolute;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow { width: 40px; height: 40px; }
+
+.horizontal-text {
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+  white-space: nowrap;
+}
+.black-card{
+  display: block;
+}
+.card.black-card p:first-of-type {
+margin-top: 10px;
+display: block;
+font-weight: bold;
+text-align: center; /* Centers the inner text */
+font-size: 15px;
+color: #333;
+}
+
+.card.black-card p:nth-of-type(2) {
+text-align: center; /* Centers the inner text */
+margin-top: 150px; /* Pushes the second <p> tag to the center of the container */
+
+}
+.answer-card{
+
+text-align: center; /* Centers the inner text */
+
+}
+.winner-prompt {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background-color: white;
+border-radius: 10px;
+box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 10px;
+text-align: center;
+width: 310px;
+height: 410px;
+border: 1px solid black;
+}
+
+.winner-prompt h2 {
+background-color: black;
+color: white;
+margin: 0; /* Remove default margin */
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+}
+
+.winner-prompt .prompt-text {
+background-color: black;
+color: white;
+
+}
+
+.black-paragraph {
+color: rgb(255, 255, 255);
+background-color: rgb(0, 0, 0);
+
+}
+
+.next-round-btn {
+background-color: #007bff;
+color: white;
+
+
+
+}
+
+.next-round-btn:hover {
+background-color: #0056b3;
+}
