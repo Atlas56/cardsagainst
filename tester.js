@@ -596,36 +596,153 @@ function displayWinnerPrompt(winnerPlayer, winnerAnswer) {
     const winnerPrompt = document.createElement('div');
     winnerPrompt.classList.add('winner-prompt');
     winnerPrompt.innerHTML = `
-    <h2>🎉 Player ${winnerPlayer} Wins! 🎉</h2>
-    <p class="black-paragraph"> "${currentQuestion}"</p>
-    <p>${winnerAnswer}"</p>
-    <button class="next-round-btn">Next Round</button>
+      <div class="blackwinner-card">
+        <p>Player ${winnerPlayer} Wins!</p>
+        <p class="black-paragraph"> "${currentQuestion}"</p>
+      </div>
+      <div class="whitewinner-card">
+        <p class="answerParagraph">${winnerAnswer}</p>
+      </div>
     `;
   
-    // Add styles for the prompt
-    winnerPrompt.style.position = 'absolute';
-    winnerPrompt.style.top = '50%';
-    winnerPrompt.style.left = '50%';
-    winnerPrompt.style.transform = 'translate(-50%, -50%)';
- 
-    winnerPrompt.style.borderRadius = '10px';
-    winnerPrompt.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.1)';
-    winnerPrompt.style.textAlign = 'center';
-    winnerPrompt.style.width = '310px';
-    winnerPrompt.style.height = '410px';
-    winnerPrompt.style.border = '1px solid black';
-  
-    // Add the prompt to the game container
     document.body.appendChild(winnerPrompt);
   
-    // Add event listener to the "Next Round" button
-    const nextRoundBtn = winnerPrompt.querySelector('.next-round-btn');
-    nextRoundBtn.addEventListener('click', () => {
-      console.log("Next round button clicked. Removing winner prompt and resetting the game.");
-      document.body.removeChild(winnerPrompt);
-      resetGame();
-    });
+    // Apply the same swipe functionality as the image card
+    let touchStartX, touchStartY, offsetX, offsetY;
+  
+    winnerPrompt.addEventListener('mousedown', startInteraction);
+    winnerPrompt.addEventListener('touchstart', startInteraction);
+    winnerPrompt.addEventListener('mousemove', handleInteraction);
+    winnerPrompt.addEventListener('touchmove', handleInteraction);
+    winnerPrompt.addEventListener('mouseup', endInteraction);
+    winnerPrompt.addEventListener('touchend', endInteraction);
+  
+    function startInteraction(event) {
+      const touchPoint = event.type.includes('touch') ? event.touches[0] : event;
+      touchStartX = touchPoint.clientX;
+      touchStartY = touchPoint.clientY;
+      console.log('Interaction started:', { touchStartX, touchStartY });
+    }
+  
+    function handleInteraction(event) {
+      if (touchStartX === undefined || touchStartY === undefined) return;
+      const touchPoint = event.type.includes('touch') ? event.touches[0] : event;
+      offsetX = touchPoint.clientX - touchStartX;
+      offsetY = touchPoint.clientY - touchStartY;
+      winnerPrompt.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.1}deg)`;
+    }
+  
+    function endInteraction() {
+      console.log('Interaction ended:', { offsetX, offsetY });
+      if (offsetX > 100) {
+        console.log('Swipe direction: right');
+        performSwipeAction('right');
+      } else if (offsetX < -100) {
+        console.log('Swipe direction: left');
+        performSwipeAction('left');
+      } else if (offsetY < -100) {
+        console.log('Swipe direction: up');
+        performSwipeAction('up');
+      } else {
+        console.log('Swipe cancelled.');
+        winnerPrompt.style.transform = '';
+      }
+      touchStartX = undefined;
+      touchStartY = undefined;
+    }
+  
+    function performSwipeAction(direction) {
+      console.log(`Performing swipe action: ${direction}`);
+      winnerPrompt.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      switch (direction) {
+        case 'right':
+          winnerPrompt.style.transform = `translate(100vw, ${offsetY}px)`;
+          break;
+        case 'left':
+          winnerPrompt.style.transform = `translate(-100vw, ${offsetY}px)`;
+          break;
+        case 'up':
+          winnerPrompt.style.transform = `translate(${offsetX}px, -100vh)`;
+          break;
+      }
+      winnerPrompt.style.opacity = 0;
+      setTimeout(() => {
+        console.log(`Winner prompt dismissed with swipe (${direction}).`);
+        document.body.removeChild(winnerPrompt);
+        resetGame();
+      }, 300);
+    }
   }
+  
+
+  
+  // Add swipe functionality to any element
+  function addSwipeToElement(element) {
+    let touchStartX, touchStartY, offsetX, offsetY;
+  
+    element.addEventListener('mousedown', startInteraction);
+    element.addEventListener('touchstart', startInteraction);
+    element.addEventListener('mousemove', handleInteraction);
+    element.addEventListener('touchmove', handleInteraction);
+    element.addEventListener('mouseup', endInteraction);
+    element.addEventListener('touchend', endInteraction);
+  
+    function startInteraction(event) {
+      const touchPoint = event.type.includes('touch') ? event.touches[0] : event;
+      touchStartX = touchPoint.clientX;
+      touchStartY = touchPoint.clientY;
+      console.log('Interaction started:', { touchStartX, touchStartY });
+    }
+  
+    function handleInteraction(event) {
+      if (touchStartX === undefined || touchStartY === undefined) return;
+      const touchPoint = event.type.includes('touch') ? event.touches[0] : event;
+      offsetX = touchPoint.clientX - touchStartX;
+      offsetY = touchPoint.clientY - touchStartY;
+      element.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(${offsetX * 0.1}deg)`;
+    }
+  
+    function endInteraction() {
+      console.log('Interaction ended:', { offsetX, offsetY });
+      if (offsetX > 100) {
+        console.log('Swipe direction: right');
+        performPromptAction('right');
+      } else if (offsetX < -100) {
+        console.log('Swipe direction: left');
+        performPromptAction('left');
+      } else if (offsetY < -100) {
+        console.log('Swipe direction: up');
+        performPromptAction('up');
+      } else {
+        console.log('Swipe cancelled.');
+        element.style.transform = '';
+      }
+      touchStartX = undefined;
+      touchStartY = undefined;
+    }
+  
+    function performPromptAction(direction) {
+      console.log(`Performing swipe action on prompt: ${direction}`);
+      switch (direction) {
+        case 'right':
+          element.style.transform = `translate(100vw, ${offsetY}px)`;
+          break;
+        case 'left':
+          element.style.transform = `translate(-100vw, ${offsetY}px)`;
+          break;
+        case 'up':
+          element.style.transform = `translate(${offsetX}px, -100vh)`;
+          break;
+      }
+      element.style.opacity = 0;
+      setTimeout(() => {
+        console.log(`Prompt swipe action (${direction}) completed.`);
+        document.body.removeChild(element);
+        resetGame();
+      }, 300);
+    }
+  }
+  
   
   // Reset the game for the next round
 // Reset the game for the next round
